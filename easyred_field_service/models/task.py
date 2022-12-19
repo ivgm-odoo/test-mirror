@@ -6,9 +6,9 @@ class ProjectTask(models.Model):
     _inherit = 'project.task'
 
     material_ids = fields.One2many(
-    comodel_name='fsm.material',
-    inverse_name='task_id',
-    string='Materials'
+        comodel_name='fsm.material',
+        inverse_name='task_id',
+        string='Materials'
     )
 
     is_saleorder = fields.Boolean(string="Require Saleorder")
@@ -28,9 +28,9 @@ class ProjectTask(models.Model):
         for rec in self:
             rec.to_supervisor = True
     
-    def action_approved(self):
+    def action_approved_by_admin(self):
         if not self.user_has_groups('easyred_field_service.group_task_approval') or self.to_supervisor == False:
-            return 
+            return False
 
         picking = self.env['stock.picking']
         move = self.env['stock.move']
@@ -59,7 +59,7 @@ class ProjectTask(models.Model):
                 'location_dest_id': picking_type.default_location_dest_id.id or cust_location.id,
             })
         #look into how sale.order creates stock.picking
-        return
+        return True
 
     def action_denied(self):
         self.env['mail.activity'].create({
@@ -70,4 +70,4 @@ class ProjectTask(models.Model):
             'res_model_id':self.env.ref('project.model_project_task').id,
             'res_id':self.id
         })
-        return
+        return True
