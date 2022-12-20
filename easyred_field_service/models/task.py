@@ -14,7 +14,7 @@ class ProjectTask(models.Model):
     is_saleorder = fields.Boolean(string="Require Saleorder")
 
     to_supervisor = fields.Boolean(string='To supervisor', default=False)
-    picking_ids = fields.One2many(comodel_name="stock.picking",inverse_name='service_id', string='Delivery Order')
+    picking_ids = fields.One2many(comodel_name="stock.picking", inverse_name='service_id', string='Delivery Order')
     picking_count = fields.Integer(
         string='Stock Count',
         compute="_compute_delivery_count"
@@ -61,7 +61,7 @@ class ProjectTask(models.Model):
         #look into how sale.order creates stock.picking
         return True
 
-    def action_denied(self):
+    def action_reject(self):
         self.env['mail.activity'].create({
             'activity_type_id':self.env.ref('mail.mail_activity_data_todo').id,
             'note':'Review materials and send to validate',
