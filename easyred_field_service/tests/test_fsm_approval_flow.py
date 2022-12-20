@@ -17,16 +17,16 @@ class TestFsmAprovalFlow(TestEasyredFsmCommon):
 
     def test_fsm_approval_flow(self):
 
-        self.task.with_user(self.project_user).action_approved()
+        self.task.with_user(self.project_user).action_approve_by_admin()
         self.assertFalse(self.task.picking_ids,"Should not be picking because task has not been approved by boss")
 
-        self.task.with_user(self.project_admin).action_approved()
+        self.task.with_user(self.project_admin).action_approve_by_admin()
         self.assertFalse(self.task.picking_ids,"Should not create picking because task has not went through first approval")
 
         self.task.with_user(self.project_user).action_send_to_supervisor()
         self.assertTrue(self.task.to_supervisor,'First approval round')
 
-        self.task.with_user(self.project_admin).action_approved()
+        self.task.with_user(self.project_admin).action_approve_by_admin()
         self.assertTrue(self.task.picking_ids,'Picking gets created')
 
         self.assertEqual(self.material.quantity,self.picking_ids.move_ids_without_package.product_uom_qty,"quantity on material and stock move should be equal")

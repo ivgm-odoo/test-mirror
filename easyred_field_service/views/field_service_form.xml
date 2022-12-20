@@ -10,7 +10,7 @@
                     <field name="is_saleorder" invisible='1'/>
                     <field name="picking_count" invisible="1"/>
                     <button name="action_send_to_supervisor" string="Approve by Boss" type="object" attrs="{'invisible': ['|', ('is_fsm', '=', False), ('to_supervisor','=', True)]}"/>
-                    <button name="action_approved_by_admin" string="Approve" type="object" attrs="{'invisible': ['|', '|', ('picking_count','>',0), ('is_fsm', '=', False), ('to_supervisor','=', False)]}" groups="easyred_field_service.group_task_approval"/>
+                    <button name="action_approve_by_admin" string="Approve" type="object" attrs="{'invisible': ['|', '|', ('picking_count','>',0), ('is_fsm', '=', False), ('to_supervisor','=', False)]}" groups="easyred_field_service.group_task_approval"/>
                     <button name="action_denied" string="Reject" type="object" attrs="{'invisible': ['|', '|', ('picking_count','>',0), ('is_fsm', '=', False), ('to_supervisor','=', False)]}" groups="easyred_field_service.group_task_approval"/>
                 </xpath>
                 <button name="action_fsm_view_material" position="attributes">

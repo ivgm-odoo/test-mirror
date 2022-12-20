@@ -28,7 +28,7 @@ class ProjectTask(models.Model):
         for rec in self:
             rec.to_supervisor = True
     
-    def action_approved_by_admin(self):
+    def action_approve_by_admin(self):
         if not self.user_has_groups('easyred_field_service.group_task_approval') or self.to_supervisor == False:
             return False
 
