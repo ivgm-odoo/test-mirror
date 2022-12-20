@@ -29,4 +29,4 @@ class TestFsmAprovalFlow(TestEasyredFsmCommon):
         self.task.with_user(self.project_admin).action_approve_by_admin()
         self.assertTrue(self.task.picking_ids,'Picking gets created')
 
-        self.assertEqual(self.material.quantity,self.picking_ids.move_ids_without_package.product_uom_qty,"quantity on material and stock move should be equal")
+        self.assertEqual(self.material.quantity,self.task.picking_ids.move_ids_without_package.product_uom_qty,"quantity on material and stock move should be equal")
