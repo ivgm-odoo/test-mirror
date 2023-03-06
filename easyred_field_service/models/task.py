@@ -20,9 +20,10 @@ class ProjectTask(models.Model):
         compute="_compute_delivery_count"
     )
     
+    @api.depends('picking_ids','picking_ids.state')
     def _compute_delivery_count(self):
-        for picking in self:
-            picking.picking_count = len(picking.picking_ids)
+        for task in self:
+            task.picking_count = len(task.picking_ids.filtered(lambda pick: not pick.state == 'cancel'))
 
     def action_send_to_supervisor(self):
         for rec in self:
