@@ -40,7 +40,7 @@ class ProjectTask(models.Model):
         if len(picking_type)>1:
             picking_type = picking_type[0]
         vals = {
-            'partner_id': self.parent_id.id,
+            'partner_id': self.partner_id.id,
             'location_id':picking_type.default_location_src_id.id,
             'picking_type_id':picking_type.id,
             'origin': self.name,
