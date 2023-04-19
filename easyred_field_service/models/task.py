@@ -28,7 +28,19 @@ class ProjectTask(models.Model):
     def action_send_to_supervisor(self):
         for rec in self:
             rec.to_supervisor = True
-    
+
+        for user in self.user_ids:
+            manager_id = user.employee_parent_id.user_id if user.employee_parent_id.user_id else None
+            if manager_id and manager_id.user_has_groups('easyred_field_service.group_task_approval'):
+                self.env['mail.activity'].create({
+                    'activity_type_id':self.env.ref('mail.mail_activity_data_todo').id,
+                    'note':'Approve materials',
+                    'date_deadline':fields.Date.today(),
+                    'user_id':manager_id.id,
+                    'res_model_id':self.env.ref('project.model_project_task').id,
+                    'res_id':self.id
+                })
+        
     def action_approve_by_admin(self):
         if not self.user_has_groups('easyred_field_service.group_task_approval') or self.to_supervisor == False:
             return False
@@ -63,12 +75,16 @@ class ProjectTask(models.Model):
         return True
 
     def action_reject(self):
-        self.env['mail.activity'].create({
-            'activity_type_id':self.env.ref('mail.mail_activity_data_todo').id,
-            'note':'Review materials and send to validate',
-            'date_deadline':fields.Date.today(),
-            'user_id':self.env.user.id,
-            'res_model_id':self.env.ref('project.model_project_task').id,
-            'res_id':self.id
-        })
+        self.ensure_one()
+        self.to_supervisor = False
+
+        for user in self.user_ids:
+            self.env['mail.activity'].create({
+                'activity_type_id':self.env.ref('mail.mail_activity_data_todo').id,
+                'note':'Review materials and send to validate',
+                'date_deadline':fields.Date.today(),
+                'user_id':user.id,
+                'res_model_id':self.env.ref('project.model_project_task').id,
+                'res_id':self.id
+            })
         return True
