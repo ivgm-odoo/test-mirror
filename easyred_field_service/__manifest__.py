@@ -30,7 +30,7 @@ The warehouse receives requests for materials associated with the task.
     'author': "Odoo, Inc",
     'website': "http://www.odoo.com",
     'category': 'Custom Developments',
-    'version': '0.2',
+    'version': '0.3',
     'license': 'OPL-1',
     'depends': [
         'project',
@@ -41,6 +41,7 @@ The warehouse receives requests for materials associated with the task.
     'data': [
         'security/ir.model.access.csv',
         'security/approval_group.xml',
-        'views/field_service_form.xml'
+        'views/field_service_form.xml',
+        'views/stock_picking_form_view.xml'
     ],
 }
