@@ -1,3 +1,3 @@
-from . import material
-from . import task
+from . import fsm_material
+from . import project_task
 from . import stock_picking

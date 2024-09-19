@@ -3,7 +3,7 @@
     "author": "Odoo PS",
     "website": "https://www.odoo.com",
     "category": "Custom Developments",
-    "version": "17.0.1.0.0",
+    "version": "17.0.1.0.1",
     "license": "OEEL-1",
     "depends": ["industry_fsm_sale", "stock"],
     "data": [
@@ -12,4 +12,5 @@
         "views/field_service_form.xml",
         "views/stock_picking_form_view.xml",
     ],
+    "demo": ["demo/default_demo.xml"],
 }
