@@ -1,3 +1,5 @@
+from odoo import Command
+
 from odoo.addons.industry_fsm_sale.tests.common import TestFsmFlowCommon
 
 
@@ -10,7 +12,12 @@ class TestEasyredFsmCommon(TestFsmFlowCommon):
             "name": "Test Project_admin",
             "login": "Test",
             "email": "test.project_admin@example.com",
-            "groups_id": [(6, 0, [cls.env.ref("easyred_field_service.group_task_approval").id])],
+            "groups_id": [
+                Command.set([
+                    cls.env.ref("easyred_field_service.group_task_approval").id,
+                    cls.env.ref("stock.group_stock_manager").id,
+                ])
+            ],
         })
 
         cls.partner_a = cls.env["res.partner"].create({
@@ -18,7 +25,9 @@ class TestEasyredFsmCommon(TestFsmFlowCommon):
             "company_id": False,
         })
 
-        cls.task.write({"partner_id": cls.partner_a, "is_saleorder": False})
+        cls.task.write({
+            "partner_id": cls.partner_a,
+        })
 
         cls.product_delivered = cls.env["product.product"].create({
             "name": "Consommable product delivery",

@@ -1,0 +1,3 @@
+<odoo>
+    <function model="ir.default" name="set" eval="('project.task', 'is_saleorder', True)" />
+</odoo>

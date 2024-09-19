@@ -24,7 +24,7 @@ class TestFsmAprovalFlow(TestEasyredFsmCommon):
         )
 
         self.task.with_user(self.project_user).action_send_to_supervisor()
-        self.assertTrue(self.task.to_supervisor, "First approval round")
+        self.assertTrue(self.task.is_supervised, "First approval round")
 
         self.task.with_user(self.project_admin).action_approve_by_admin()
         self.assertTrue(self.task.picking_ids, "Picking gets created")
@@ -32,5 +32,5 @@ class TestFsmAprovalFlow(TestEasyredFsmCommon):
         self.assertEqual(
             self.material.quantity,
             self.task.picking_ids.move_ids_without_package.product_uom_qty,
-            "quantity on material and stock move should be equal",
+            "Quantity on material and stock move should be equal",
         )
