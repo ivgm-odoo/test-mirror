@@ -30,7 +30,7 @@ The warehouse receives requests for materials associated with the task.
     'author': "Odoo, Inc",
     'website': "http://www.odoo.com",
     'category': 'Custom Developments',
-    'version': '0.3',
+    'version': '17.0.1.0.0',
     'license': 'OPL-1',
     'depends': [
         'project',
