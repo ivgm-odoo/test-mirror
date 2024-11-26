@@ -1,8 +1,7 @@
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class StockPicking(models.Model):
-    _inherit = 'stock.picking'
+    _inherit = "stock.picking"
 
-    service_id = fields.Many2one(comodel_name='project.task', string='Field Service')
-    
+    service_id = fields.Many2one(string="Field Service", comodel_name="project.task")

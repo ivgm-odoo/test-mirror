@@ -1,38 +1,51 @@
 <odoo>
-    <data>
-        <record id="field_service_form_inherit_easyred" model="ir.ui.view" >
-            <field name="name">view.field.service.form.inherit.easyred</field>
-            <field name="model">project.task</field>
-            <field name="inherit_id" ref="industry_fsm_sale.view_task_form2_inherit" />
-            <field name="arch" type="xml">
-                <xpath expr="//header" position="inside">
-                    <field name="to_supervisor" invisible="1"/>
-                    <field name="is_saleorder" invisible="1"/>
-                    <field name="picking_count" invisible="1"/>
-                    <button name="action_send_to_supervisor" string="Approve by Boss" type="object" attrs="{'invisible': ['|', ('is_fsm', '=', False), ('to_supervisor', '=', True)]}"/>
-                    <button name="action_approve_by_admin" string="Approve" type="object" attrs="{'invisible': ['|', '|', ('picking_count', '>', 0), ('is_fsm', '=', False), ('to_supervisor', '=', False)]}" groups="easyred_field_service.group_task_approval"/>
-                    <button name="action_reject" string="Reject" type="object" attrs="{'invisible': ['|', '|', ('picking_count', '>', 0), ('is_fsm', '=', False), ('to_supervisor', '=', False)]}" groups="easyred_field_service.group_task_approval"/>
-                </xpath>
-                <button name="action_fsm_view_material" position="attributes">
-                    <attribute name='attrs'>{'invisible': ['|','|', '&amp;', ('partner_id', '=', False), ('is_fsm', '=', False), ('allow_material', '=', False), ('is_saleorder', '=', False)]}</attribute>
-                </button>
-                <field name="user_ids" position="after">
-                    <field name="is_saleorder" attrs="{'invisible': [('is_fsm', '=', False)]}"/>
-                </field>
-                <xpath expr="//notebook" position="inside">
-                    <page name="materials" string="Materials" attrs="{'invisible': ['|', ('is_fsm', '=', False), ('is_saleorder', '=', True)]}">
-                        <field name="material_ids" nolabel="1" >
-                            <tree editable="bottom">
-                                <field name="task_id" invisible="1"/>
-                                <field name="product_id"/>
-                                <field name="quantity"/>
-                                <field name="qty_on_hand"/>
-                                <field name="uom_id"/>
-                            </tree>
-                        </field>
-                    </page>
-                </xpath>
+    <record id="view_task_form2_inherit" model="ir.ui.view">
+        <field name="name">view.task.form2.inherit.easyred</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="industry_fsm_sale.view_task_form2_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="is_supervised" invisible="1"/>
+                <field name="is_saleorder" invisible="1"/>
+                <field name="picking_count" invisible="1"/>
+                <button
+                    name="action_send_to_supervisor"
+                    string="Approve by Boss"
+                    type="object"
+                    invisible="(not is_fsm or is_supervised)"/>
+                <button
+                    name="action_approve_by_admin"
+                    string="Approve"
+                    type="object"
+                    groups="easyred_field_service.group_task_approval"
+                    invisible="picking_count > 0 or not is_fsm or not is_supervised"/>
+                <button
+                    name="action_reject"
+                    string="Reject"
+                    type="object"
+                    groups="easyred_field_service.group_task_approval"
+                    invisible="picking_count > 0 or not is_fsm or not is_supervised"/>
+            </xpath>
+            <button name="action_fsm_view_material" position="attributes">
+                <attribute name="invisible">(not partner_id and not is_fsm) or not allow_material or not is_saleorder
+                </attribute>
+            </button>
+            <field name="user_ids" position="after">
+                <field name="is_saleorder" invisible="not is_fsm"/>
             </field>
-        </record>
-    </data>
+            <xpath expr="//notebook" position="inside">
+                <page name="materials" string="Materials" invisible="not is_fsm or is_saleorder">
+                    <field name="material_ids" nolabel="1">
+                        <tree editable="bottom">
+                            <field name="task_id" column_invisible="True"/>
+                            <field name="product_id"/>
+                            <field name="quantity"/>
+                            <field name="qty_on_hand"/>
+                            <field name="uom_id"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
 </odoo>
